@@ -14,6 +14,7 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
+import { UserListService } from '../shared/firebase-services/user-list.service';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -37,6 +38,8 @@ export class DialogAddUserComponent {
   user = new User();
   birthDate: Date | undefined;
 
+  constructor(private userService: UserListService) {}
+
   onNoClick(): void {
     // this.dialogRef.close();
     console.log('close');
@@ -44,7 +47,10 @@ export class DialogAddUserComponent {
 
   saveUser(){
     this.user.birthDate = this.birthDate!.getTime();
-    console.log(this.user);    
+    console.log(this.user);
+    // this.userService.addUser(this.user, "users")
+    this.userService.addUser();
+
   }
 
 }
