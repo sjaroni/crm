@@ -15,6 +15,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
 import { UserListService } from '../shared/firebase-services/user-list.service';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -28,7 +29,8 @@ import { UserListService } from '../shared/firebase-services/user-list.service';
     MatFormFieldModule,
     MatDatepickerModule,
     MatDatepicker,
-    FormsModule
+    FormsModule,
+    MatProgressBarModule
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './dialog-add-user.component.html',
@@ -37,6 +39,7 @@ import { UserListService } from '../shared/firebase-services/user-list.service';
 export class DialogAddUserComponent {
   user = new User();
   birthDate: Date | undefined;
+  loading: boolean = false;
 
   constructor(private userService: UserListService) {}
 
@@ -47,10 +50,9 @@ export class DialogAddUserComponent {
 
   saveUser(){
     this.user.birthDate = this.birthDate!.getTime();
-    console.log(this.user);
-    // this.userService.addUser(this.user, "users")
-    this.userService.addUser();
-
+    this.loading = true;
+    this.userService.addUser(this.user);
+    this.loading = false;
   }
 
 }

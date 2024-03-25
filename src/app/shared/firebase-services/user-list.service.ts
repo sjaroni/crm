@@ -14,32 +14,26 @@ import {
   orderBy,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { User } from '../../../models/user.class';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserListService {
   firestore: Firestore = inject(Firestore);
-  constructor() { }
+  constructor() {}
 
-
-  // Insert-Funktion
-
-  async addUser(){
-    console.log('klappt');    
+  async addUser(item: User) {
+    await addDoc(this.getUsersRef(), item.toJSON())
+      .catch((err) => {
+        console.error(err);
+      })
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef?.id);
+      });
   }
 
-  // async addUser(item: User, colId: 'notes' | 'trash') {
-  //   let collection =
-  //     colId === 'trash' ? this.getTrashRef() : this.getNotesRef();
-
-  //   await addDoc(collection, item)
-  //     .catch((err) => {
-  //       console.error(err);
-  //     })
-  //     .then((docRef) => {
-  //       console.log('Document written with ID: ', docRef?.id);
-  //     });
-  // }
-
+  getUsersRef() {
+    return collection(this.firestore, 'users');
+  }
 }
