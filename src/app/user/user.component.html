@@ -6,16 +6,15 @@
         <th>E-Mail</th>
         <th>City</th>
       </tr>
-      <tr>
-        <td>Name</td>
-        <td>E-Mail</td>
-        <td>City</td>
-      </tr>
-      <tr>
-        <td>Name</td>
-        <td>E-Mail</td>
-        <td>City</td>
-      </tr>
+      
+      @for (user of this.userService.userList; track $index) {
+        <tr>
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.city }}</td>
+        </tr>        
+      }
+
     </table>
   </mat-card-content>
 </mat-card>

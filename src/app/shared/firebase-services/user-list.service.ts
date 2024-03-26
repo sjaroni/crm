@@ -21,7 +21,35 @@ import { User } from '../../../models/user.class';
 })
 export class UserListService {
   firestore: Firestore = inject(Firestore);
-  constructor() {}
+  userList: any = [];
+
+  unsubList;
+  unsubSingle;
+
+  constructor() {
+    this.unsubList = onSnapshot(this.getUsersRef(), (list) => {
+      list.forEach((element) => {
+        this.userList.push(element.data());
+      });
+    });
+
+    this.unsubSingle = onSnapshot(this.getSingleDocRef('users', 'xx'), (element) => { 
+
+    });
+  }
+  
+  getUser(){
+    this.unsubList = onSnapshot(this.getUsersRef(), (list) => {
+      list.forEach((element) => {
+        this.userList.push(element.data());
+      });
+    });
+  }
+
+  ngonDestroy() {
+    this.unsubList();
+    this.unsubSingle();
+  }
 
   async addUser(item: User) {
     await addDoc(this.getUsersRef(), item.toJSON())
@@ -35,5 +63,9 @@ export class UserListService {
 
   getUsersRef() {
     return collection(this.firestore, 'users');
+  }
+
+  getSingleDocRef(colId: string, docId: string) {
+    return doc(collection(this.firestore, colId), docId);
   }
 }
