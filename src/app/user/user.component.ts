@@ -7,6 +7,7 @@ import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.compo
 import { User } from '../../models/user.class';
 import { MatCardModule } from '@angular/material/card';
 import { UserListService } from '../shared/firebase-services/user-list.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -17,6 +18,7 @@ import { UserListService } from '../shared/firebase-services/user-list.service';
     MatTooltipModule, 
     MatDialogModule,
     MatCardModule,
+    RouterLink,
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',

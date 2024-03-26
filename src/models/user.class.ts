@@ -1,4 +1,5 @@
-export class User {  
+export class User {
+  id?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -7,7 +8,7 @@ export class User {
   zipCode: number;
   city: string;
 
-  constructor(obj?: any) {    
+  constructor(obj?: any) {
     this.firstName = obj ? obj.firstName : '';
     this.lastName = obj ? obj.lastName : '';
     this.email = obj ? obj.email : '';
@@ -18,14 +19,14 @@ export class User {
   }
 
   public toJSON() {
-    return {      
+    return {
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
       birthDate: this.birthDate,
       street: this.street,
       zipCode: this.zipCode,
-      city: this.city
+      city: this.city,
     };
   }
 }

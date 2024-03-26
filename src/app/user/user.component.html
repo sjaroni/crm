@@ -7,14 +7,13 @@
         <th>City</th>
       </tr>
       
-      @for (user of this.userService.userList; track $index) {
-        <tr>
-          <td>{{ user.firstName }} {{ user.lastName }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.city }}</td>
-        </tr>        
+      @for (user of this.userService.userList; track $index) {        
+          <tr routerLink="/user/{{ user.id }}">            
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.city }}</td>
+          </tr>
       }
-
     </table>
   </mat-card-content>
 </mat-card>

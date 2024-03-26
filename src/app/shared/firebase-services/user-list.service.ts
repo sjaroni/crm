@@ -15,6 +15,7 @@ import {
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../../../models/user.class';
+import { JsonPipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -29,21 +30,27 @@ export class UserListService {
   constructor() {
     this.unsubList = onSnapshot(this.getUsersRef(), (list) => {
       list.forEach((element) => {
-        this.userList.push(element.data());
+        this.userList.push(this.setUserObject(element.data(), element.id));
       });
     });
 
-    this.unsubSingle = onSnapshot(this.getSingleDocRef('users', 'xx'), (element) => { 
-
-    });
+    this.unsubSingle = onSnapshot(
+      this.getSingleDocRef('users', 'xx'),
+      (element) => {}
+    );
   }
-  
-  getUser(){
-    this.unsubList = onSnapshot(this.getUsersRef(), (list) => {
-      list.forEach((element) => {
-        this.userList.push(element.data());
-      });
-    });
+
+  setUserObject(obj: any, id: string): any {
+    return {
+      id: id,
+      firstName: obj.firstName,
+      lastName: obj.lastName,
+      email: obj.email,
+      birthDate: obj.birthDate,
+      street: obj.street,
+      zipCode: obj.zipCode,
+      city: obj.city,
+    };
   }
 
   ngonDestroy() {
