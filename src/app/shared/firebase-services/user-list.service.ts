@@ -15,7 +15,6 @@ import {
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../../../models/user.class';
-import { JsonPipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
