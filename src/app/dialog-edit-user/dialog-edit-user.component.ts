@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { User } from '../../models/user.class';
 
 @Component({
   selector: 'app-dialog-edit-user',
@@ -9,5 +8,5 @@ import { User } from '../../models/user.class';
   styleUrl: './dialog-edit-user.component.scss'
 })
 export class DialogEditUserComponent {
-  user: User;
+  
 }

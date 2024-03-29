@@ -38,6 +38,7 @@ export class UserDetailComponent implements OnInit {
     this.route.paramMap.subscribe((paramMap) => {
       this.userID = paramMap.get('id');
       this.userService.getSingleUserData(this.userID);
+      this.user = new User(this.userService.user);
     });
   }
 
@@ -48,6 +49,7 @@ export class UserDetailComponent implements OnInit {
   editMenu(){
     const dialog = this.dialog.open(DialogEditAddressComponent, {});
     dialog.componentInstance.user = this.user;
+    console.log(this.user);
   }
   editUserDetail(){
     this.dialog.open(DialogEditUserComponent, {});

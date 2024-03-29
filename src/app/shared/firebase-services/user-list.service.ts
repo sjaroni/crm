@@ -19,6 +19,7 @@ export class UserListService {
 
   userList: any = [];
   singleUserData: any = [];
+  user: User = new User();
 
   unsubNotes;  
   private singleUserUnsubscribe: Unsubscribe | undefined;
@@ -48,8 +49,9 @@ export class UserListService {
       this.getSingleDocRef('users', docId),
       (element) => {        
         this.singleUserData.push(this.setNoteObject(element.data(), element.id));
-      }
-    );
+        this.user = new User(this.user = new User(this.singleUserData));
+      }      
+    );    
   }
   
   setNoteObject(obj: any, id: string): any {
