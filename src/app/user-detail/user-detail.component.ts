@@ -1,15 +1,35 @@
-import { Component } from '@angular/core';
-import { MatCard } from '@angular/material/card';
+import { Component, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { ActivatedRoute } from '@angular/router';
+import { UserListService } from '../shared/firebase-services/user-list.service';
+import { User } from '../../models/user.class';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [
-    MatCard
-  ],
+  imports: [CommonModule, MatCardModule],
   templateUrl: './user-detail.component.html',
-  styleUrl: './user-detail.component.scss'
+  styleUrl: './user-detail.component.scss',
 })
-export class UserDetailComponent {
+export class UserDetailComponent implements OnInit {
+  userID: any = '';
+  user: User = new User();
+
+  constructor(
+    private route: ActivatedRoute,
+    public userService: UserListService
+  ) {}
+
+  ngOnInit() {
+    this.route.paramMap.subscribe((paramMap) => {
+      this.userID = paramMap.get('id');
+      this.userService.getSingleUserData(this.userID);
+    });
+  }
+
+  ngOnDestroy() {    
+    this.userService.unsubscribeSingleUserData();
+  }
 
 }

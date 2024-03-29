@@ -2,16 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
   collection,
-  collectionData,
   doc,
   onSnapshot,
   addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  limit,
-  orderBy,
+  getDoc,
+  Unsubscribe,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../../../models/user.class';
@@ -21,25 +16,43 @@ import { User } from '../../../models/user.class';
 })
 export class UserListService {
   firestore: Firestore = inject(Firestore);
-  userList: any = [];
 
-  unsubList;
-  unsubSingle;
+  userList: any = [];
+  singleUserData: any = [];
+
+  unsubNotes;  
+  private singleUserUnsubscribe: Unsubscribe | undefined;
 
   constructor() {
-    this.unsubList = onSnapshot(this.getUsersRef(), (list) => {
-      list.forEach((element) => {
-        this.userList.push(this.setUserObject(element.data(), element.id));
-      });
-    });
-
-    this.unsubSingle = onSnapshot(
-      this.getSingleDocRef('users', 'xx'),
-      (element) => {}
-    );
+    this.unsubNotes = this.subNotesList();
   }
 
-  setUserObject(obj: any, id: string): any {
+  subNotesList() {
+    return onSnapshot(this.getUsersRef(), (list) => {
+      this.userList = [];
+      list.forEach((element) => {
+        this.userList.push(this.setNoteObject(element.data(), element.id));
+      });
+    });
+  }
+  
+  unsubscribeSingleUserData() {
+    if (this.singleUserUnsubscribe) {
+      this.singleUserUnsubscribe();
+    }
+  }
+  
+  getSingleUserData(docId: string) {
+    this.singleUserData = [];
+    this.singleUserUnsubscribe = onSnapshot(
+      this.getSingleDocRef('users', docId),
+      (element) => {        
+        this.singleUserData.push(this.setNoteObject(element.data(), element.id));
+      }
+    );
+  }
+  
+  setNoteObject(obj: any, id: string): any {
     return {
       id: id,
       firstName: obj.firstName,
@@ -52,10 +65,53 @@ export class UserListService {
     };
   }
 
-  ngonDestroy() {
-    this.unsubList();
-    this.unsubSingle();
+  getUsersRef() {
+    return collection(this.firestore, 'users');
   }
+
+  getSingleDocRef(colId: string, docId: string) {
+    return doc(collection(this.firestore, colId), docId);
+  }
+
+  ngonDestroyy() {
+    this.unsubNotes();
+    this.singleUserData;
+  }
+  // constructor() {
+  //   this.unsubList = onSnapshot(this.getUsersRef(), (list) => {
+  //     list.forEach((element) => {
+  //       this.userList.push(this.setUserObject(element.data(), element.id));
+  //     });
+  //   });
+
+  //   this.unsubSingle = onSnapshot(this.getUsersRef(), (list) => {
+  //     list.forEach((element) => {
+  //       this.userList.push(this.setUserObject(element.data(), element.id));
+  //     });
+  //   });
+
+  // }
+
+  // getUser() {
+  //   onSnapshot(this.getUsersRef(), (list) => {
+  //     list.forEach((element) => {
+  //       this.userList.push(this.setUserObject(element.data(), element.id));
+  //     });
+  //   });
+  // }
+
+  // async getUserData(docId: string) {
+  //   const docRef = doc(this.getUsersRef(), docId);
+  //   const docSnap = await getDoc(docRef);
+
+  //   if (docSnap.exists()) {
+  //     // console.log('Document data:', docSnap.data());
+  //     //this.singleUserData.push(docSnap.data());
+  //     this.singleUserData.push(this.setUserObject(docSnap.data(), docId))
+  //   } else {
+  //     console.log('No such document!');
+  //   }
+  // }
 
   async addUser(item: User) {
     await addDoc(this.getUsersRef(), item.toJSON())
@@ -65,13 +121,5 @@ export class UserListService {
       .then((docRef) => {
         console.log('Document written with ID: ', docRef?.id);
       });
-  }
-
-  getUsersRef() {
-    return collection(this.firestore, 'users');
-  }
-
-  getSingleDocRef(colId: string, docId: string) {
-    return doc(collection(this.firestore, colId), docId);
   }
 }

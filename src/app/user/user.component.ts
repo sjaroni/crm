@@ -27,8 +27,13 @@ export class UserComponent implements OnInit {
   user = new User();
   userList: any = [];
 
-  constructor(public dialog: MatDialog, public userService: UserListService,) {}
+  constructor(public dialog: MatDialog, private userService: UserListService) {}
   
+  getUsers(): User[]{
+    return this.userService.userList;
+  }
+
+
   ngOnInit(): void {
     this.userService.userList;
   }
