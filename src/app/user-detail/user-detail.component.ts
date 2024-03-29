@@ -6,7 +6,10 @@ import { User } from '../../models/user.class';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
+import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-address.component';
 
 @Component({
   selector: 'app-user-detail',
@@ -15,7 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule, 
     MatCardModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
@@ -26,7 +30,8 @@ export class UserDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public userService: UserListService
+    public userService: UserListService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -40,7 +45,12 @@ export class UserDetailComponent implements OnInit {
     this.userService.unsubscribeSingleUserData();
   }
 
-  openAddressDialog(){
-    // new dialog
+  editMenu(){
+    const dialog = this.dialog.open(DialogEditAddressComponent, {});
+    dialog.componentInstance.user = this.user;
   }
+  editUserDetail(){
+    this.dialog.open(DialogEditUserComponent, {});
+  }
+
 }
