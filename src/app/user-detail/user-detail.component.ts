@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
 import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-address.component';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-user-detail',
@@ -21,6 +22,7 @@ import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-a
     MatButtonModule,
     MatMenuModule
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
 })
@@ -52,7 +54,8 @@ export class UserDetailComponent implements OnInit {
     dialog.componentInstance.user = this.user;
   }
   editUserDetail(){
-    this.dialog.open(DialogEditUserComponent, {});
+    const dialog = this.dialog.open(DialogEditUserComponent, {});
+    dialog.componentInstance.user = this.user;
   }
 
 }
