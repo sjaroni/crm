@@ -40,6 +40,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 export class DialogEditUserComponent {
   user: User | undefined;
   loading: boolean = false;
+  userID: string = '';
+  birthDate: Date | undefined;
   
   constructor(
     private userService: UserListService,
@@ -48,11 +50,14 @@ export class DialogEditUserComponent {
     
   }
 
-  saveUser() {    
-    this.loading = true;
-    
-    this.loading = false;
-    this.closeDialog();
+  saveUser() {
+    if(this.user){
+      this.user.birthDate = this.birthDate!.getTime();
+      this.loading = true;
+      this.userService.updateUser(this.userID, this.user);
+      this.loading = false;
+      this.closeDialog();
+    }
   }
 
   closeDialog() {

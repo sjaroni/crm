@@ -7,6 +7,7 @@ import {
   addDoc,
   getDoc,
   Unsubscribe,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../../../models/user.class';
@@ -50,8 +51,19 @@ export class UserListService {
         callback();
       }      
     );
+  }  
+
+  async updateUser(docId: string, userData: User){
+    // console.log('UserID: ', docId);
+    // console.log('UserData: ', userData);  
+    if (docId) {
+      let docRef = doc(this.getUsersRef(), docId);
+      await updateDoc(docRef, userData.toJSON()).catch((err) => {
+        console.log(err);
+      });
+    }
   }
-  
+
   setNoteObject(obj: any, id: string): any {
     return {
       id: id,

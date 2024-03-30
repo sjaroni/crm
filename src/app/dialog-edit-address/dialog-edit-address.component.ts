@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogActions,
@@ -33,26 +33,28 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatProgressBarModule,
   ],
   templateUrl: './dialog-edit-address.component.html',
-  styleUrl: './dialog-edit-address.component.scss'
+  styleUrl: './dialog-edit-address.component.scss',
 })
-export class DialogEditAddressComponent {
+export class DialogEditAddressComponent{
   user: User | undefined;
   loading: boolean = false;
+  userID: string = '';
 
   constructor(
     private userService: UserListService,
     public dialogRef: MatDialogRef<DialogEditAddressComponent>
   ) {}
 
-  saveUser() {    
-    this.loading = true;
-    
-    this.loading = false;
-    this.closeDialog();
+  saveUser() {
+    if(this.user){
+      this.loading = true;
+      this.userService.updateUser(this.userID, this.user);
+      this.loading = false;
+      this.closeDialog();
+    }
   }
 
   closeDialog() {
     this.dialogRef.close();
   }
-
 }

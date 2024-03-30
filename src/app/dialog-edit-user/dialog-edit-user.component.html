@@ -28,7 +28,7 @@
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Birth Date</mat-label>
         <!-- <input [disabled]="loading" [value]="user!.birthDate" matInput [matDatepicker]="picker1" /> -->
-        <input [disabled]="loading" matInput [matDatepicker]="picker1" />
+        <input [disabled]="loading" [(ngModel)]="birthDate" matInput [matDatepicker]="picker1" />
         <mat-datepicker-toggle
           matIconSuffix
           [for]="picker1"
