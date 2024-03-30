@@ -17,8 +17,7 @@ import { User } from '../../../models/user.class';
 export class UserListService {
   firestore: Firestore = inject(Firestore);
 
-  userList: any = [];
-  singleUserData: any = [];
+  userList: any = [];  
   user: User = new User();
 
   unsubNotes;  
@@ -43,15 +42,14 @@ export class UserListService {
     }
   }
   
-  getSingleUserData(docId: string) {
-    this.singleUserData = [];
+  getSingleUserData(docId: string, callback: () => void) {    
     this.singleUserUnsubscribe = onSnapshot(
       this.getSingleDocRef('users', docId),
       (element) => {        
-        this.singleUserData.push(this.setNoteObject(element.data(), element.id));
-        this.user = new User(this.user = new User(this.singleUserData));
+        this.user = new User(this.setNoteObject(element.data(), element.id));
+        callback();
       }      
-    );    
+    );
   }
   
   setNoteObject(obj: any, id: string): any {
@@ -76,45 +74,9 @@ export class UserListService {
   }
 
   ngonDestroyy() {
-    this.unsubNotes();
-    this.singleUserData;
+    this.unsubNotes();    
   }
-  // constructor() {
-  //   this.unsubList = onSnapshot(this.getUsersRef(), (list) => {
-  //     list.forEach((element) => {
-  //       this.userList.push(this.setUserObject(element.data(), element.id));
-  //     });
-  //   });
-
-  //   this.unsubSingle = onSnapshot(this.getUsersRef(), (list) => {
-  //     list.forEach((element) => {
-  //       this.userList.push(this.setUserObject(element.data(), element.id));
-  //     });
-  //   });
-
-  // }
-
-  // getUser() {
-  //   onSnapshot(this.getUsersRef(), (list) => {
-  //     list.forEach((element) => {
-  //       this.userList.push(this.setUserObject(element.data(), element.id));
-  //     });
-  //   });
-  // }
-
-  // async getUserData(docId: string) {
-  //   const docRef = doc(this.getUsersRef(), docId);
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     // console.log('Document data:', docSnap.data());
-  //     //this.singleUserData.push(docSnap.data());
-  //     this.singleUserData.push(this.setUserObject(docSnap.data(), docId))
-  //   } else {
-  //     console.log('No such document!');
-  //   }
-  // }
-
+  
   async addUser(item: User) {
     await addDoc(this.getUsersRef(), item.toJSON())
       .catch((err) => {
